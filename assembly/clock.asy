@@ -1,8 +1,8 @@
 main: {
-    reset 1;                                // $pos1 = 0
-    incr #1;					            // incr les secondes					
+    reset 1;                                // pos sur la premiere bande = 0
+    incr #1;                                // incr les secondes					
     xor #1,sec;
-    cond_jump nzflag,print;			        // verifier si secondes < 60
+    cond_jump nzflag,print;                 // verifier si secondes < 60
     sub #1,sec;
     mv #2,#1;
     right 1;
@@ -10,9 +10,9 @@ main: {
 }
 
 incr_min: {
-    incr #1;					            // incr les minutes
+    incr #1;                                // incr les minutes
     xor #1,min;
-    cond_jump nzflag,print;			        // verifier si minutes < 60
+    cond_jump nzflag,print;                 // verifier si minutes < 60
     sub #1,min;
     mv #2,#1;
     right 1;
@@ -20,9 +20,9 @@ incr_min: {
 }
 
 incr_hour: {
-    incr #1;					            // incr les heures
+    incr #1;                                // incr les heures
     xor #1,hour;
-    cond_jump nzflag,print;			        // verifier si heures < 24
+    cond_jump nzflag,print;                 // verifier si heures < 24
     sub #1,hour;
     mv #2,#1;
     right 1;
@@ -31,14 +31,15 @@ incr_hour: {
 
 incr_day: {
     right 1;
-    mv #1,#2; 					            // #2 = mois
+    mv #1,#2;                               // #2 = mois
     left 1;
-    incr #1;					            // incr les jours
+    incr #1;                                // incr les jours
     right 2;
     or #2,0;                                // verifier si l'annee en cours est bisextile
     left 2;
     cond_jump zflag,incr_day_nonleap;
     jump incr_day_leap;
+}
 
 incr_day_nonleap: {
     xor #1,daynleap[#2];
@@ -54,7 +55,7 @@ incr_day_nonleap: {
 
 incr_day_leap: {
     xor #1,dayleap[#2];
-    cond_jump nzflag, print;                // verifier si jours < nb de jours dans mois
+    cond_jump nzflag,print;                 // verifier si jours < nb de jours dans mois
     right 1;
     mv #1,#2;                               // #2 = mois
     left 1;
@@ -65,9 +66,9 @@ incr_day_leap: {
 }
 
 incr_month: {
-    incr #1;					            // incr les mois
+    incr #1;                                // incr les mois
     xor #1,month;
-    cond_jump nzflag,print;			        // verifier si mois < 12
+    cond_jump nzflag,print;                 // verifier si mois < 12
     sub #1,month;
     mv #2,#1;
     right 1;
@@ -75,7 +76,7 @@ incr_month: {
 }
 
 incr_year: {
-    incr #1;					            // incr les annees
+    incr #1;                                // incr les annees
     mod #1,400;
     cond_jump zflag,print_leap;
     mod #1,100;
@@ -102,7 +103,7 @@ print_leap: {
 print: {
     reset 1;
     jump wait_clock;
-    						            // afficher
+    						                // afficher
     jump main;
 }
 
