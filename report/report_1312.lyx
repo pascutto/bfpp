@@ -1,0 +1,966 @@
+#LyX 1.6.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\language french
+\inputencoding auto
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize a4paper
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language french
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Rapport intermédiaire 
+\begin_inset Newline newline
+\end_inset
+
+Microprocesseur i<3bf++
+\end_layout
+
+\begin_layout Date
+Dimanche 13 Décembre 2015
+\end_layout
+
+\begin_layout Author
+
+\noun on
+Mihai Dusmanu, Caroline Etienne, Clément Pascutto
+\end_layout
+
+\begin_layout Abstract
+Nous avons choisi d'implémenter un processeur dont l'assembleur est inspiré
+ du langage 
+\emph on
+brainfuck
+\emph default
+, augmenté par des fonctionalités supplémentaires améliorant sa rapidité,
+ sans pour autant ajouter d'instructions.
+\end_layout
+
+\begin_layout Part*
+Quelques choix sur les données
+\end_layout
+
+\begin_layout Standard
+La taille des mots choisie pour le processeur est de 16 bits ; les entiers
+ sont représentés en 
+\emph on
+Big Endian
+\emph default
+ et sont non signés.
+\end_layout
+
+\begin_layout Part*
+Assembleur
+\end_layout
+
+\begin_layout Section*
+Brainfuck
+\end_layout
+
+\begin_layout Standard
+On reprend les instructions du langage brainfuck de 1993 : le processeur
+ de départ est une machine à compteurs.
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\begin_inset Tabular
+<lyxtabular version="3" rows="9" columns="2">
+<features>
+<column alignment="center" valignment="middle" width="15text%">
+<column alignment="center" valignment="middle" width="78text%">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Instruction
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Effet
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $>$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Incrémente le pointeur de données
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $<$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Décrémente le pointeur de données
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $+$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Incrémente le compteur courant
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $-$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Décrémente le compteur courant
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $,$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Affiche la valeur du compteur courant
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $.$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Lit et enregistre une valeur dans le compteur courant
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $[$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Saute à l'instruction après le 
+\begin_inset Formula $]$
+\end_inset
+
+ correspondant si la valeur du compteur courant est nulle, sinon saute à
+ l'instruction suivante
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $]$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Retourne à l'instruction 
+\begin_inset Formula $[$
+\end_inset
+
+ correspondante
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Améliorations : bf++
+\end_layout
+
+\begin_layout Standard
+\align block
+Pour améliorer l'efficacité du processeur, on ajoute des fonctionalités
+ rétro-compatibles qui seront implémentées directement en hardware, sans
+ ajouter d'instructions.
+ Elles permettent également de rendre le code plus lisible.
+\end_layout
+
+\begin_layout Standard
+\align block
+Dans le tableau suivant, 
+\begin_inset Formula $(ch)$
+\end_inset
+
+ est un caractère de 
+\begin_inset Formula $\left\{ <,>,+,-\right\} $
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\align block
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\begin_inset Tabular
+<lyxtabular version="3" rows="4" columns="4">
+<features>
+<column alignment="center" valignment="middle" width="15text%">
+<column alignment="center" valignment="middle" width="19.5text%">
+<column alignment="center" valignment="middle" width="23text%">
+<column alignment="center" valignment="middle" width="28text%">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Instruction
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Condition
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Effet
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Exemple
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $n(ch)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $n\in\mathbb{N}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Formula $0\leq n<2^{16}$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $n$
+\end_inset
+
+ fois 
+\begin_inset Formula $(ch)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $15+$
+\end_inset
+
+ ajoute 
+\begin_inset Formula $15$
+\end_inset
+
+ au compteur courant 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\#(ch)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+la valeur du compteur courant n'est pas nulle
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $k$
+\end_inset
+
+ fois 
+\begin_inset Formula $(ch)$
+\end_inset
+
+,
+\end_layout
+
+\begin_layout Plain Layout
+où 
+\begin_inset Formula $k$
+\end_inset
+
+ est la plus grande puissance de 
+\begin_inset Formula $2$
+\end_inset
+
+ plus petite que la valeur du compteur courant
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+si la valeur du compteur courant est 
+\begin_inset Formula $6$
+\end_inset
+
+, 
+\begin_inset Formula $\#+$
+\end_inset
+
+ ajoute 
+\begin_inset Formula $4$
+\end_inset
+
+ à ce compteur
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\$(ch)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $k$
+\end_inset
+
+ fois 
+\begin_inset Formula $(ch)$
+\end_inset
+
+, 
+\end_layout
+
+\begin_layout Plain Layout
+où 
+\begin_inset Formula $k$
+\end_inset
+
+ est la dernière puissance de 
+\begin_inset Formula $2$
+\end_inset
+
+ calculée par un 
+\begin_inset Formula $\#$
+\end_inset
+
+, par défaut 
+\begin_inset Formula $0$
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+si la mémoire est 
+\begin_inset Formula $(7,0,0,0,0)$
+\end_inset
+
+, et le compteur courant est le premier, 
+\begin_inset Formula $\#>\$+$
+\end_inset
+
+ transforme la mémoire en 
+\begin_inset Formula $(7,0,0,0,4)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Part*
+Architecture du i<3bf++
+\end_layout
+
+\begin_layout Section*
+Architecture générale
+\end_layout
+
+\begin_layout Standard
+Le microprocesseur est constitué des composants suivants :
+\end_layout
+
+\begin_layout Itemize
+Une mémoire ROM contenant les instructions du programme (voir paragraphe
+ suivant pour l'encodage).
+\end_layout
+
+\begin_layout Itemize
+Une table de routage composée d'une ROM qui convertit les instructions en
+ bits de contrôle pour les autres composants.
+\end_layout
+
+\begin_layout Itemize
+Une unité arithmétique (UA) capable d'effectuer les opérations PLUS, MOINS
+ et de calculer la plus grande puissance de 
+\begin_inset Formula $2$
+\end_inset
+
+ inférieure à un entier.
+\end_layout
+
+\begin_layout Itemize
+Une mémoire RAM contenant 
+\begin_inset Formula $2^{16}$
+\end_inset
+
+ compteurs.
+\end_layout
+
+\begin_layout Itemize
+Un pointeur indiquant l'adresse du compteur courant dans la RAM.
+\end_layout
+
+\begin_layout Itemize
+Un registre de 
+\begin_inset Formula $16$
+\end_inset
+
+ bits contenant la valeur du dernier 
+\begin_inset Formula $\#$
+\end_inset
+
+ calculé.
+\end_layout
+
+\begin_layout Section*
+Flags
+\end_layout
+
+\begin_layout Standard
+L'UA sera capable de lever plusieurs flags :
+\end_layout
+
+\begin_layout Itemize
+Overflow
+\end_layout
+
+\begin_layout Itemize
+Underflow
+\end_layout
+
+\begin_layout Itemize
+Zero : contient si le résultat de la dernière opération est égal à 
+\begin_inset Formula $0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section*
+Encodage des instructions (compilation de l'assembleur)
+\end_layout
+
+\begin_layout Standard
+Les instructions stockées dans la ROM sont des mots de 20 bits :
+\end_layout
+
+\begin_layout Itemize
+3 bits sont réservés à l'encodage des 8 opérations de base qui sont encodées
+ de façon à faciliter le routage :
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Tabular
+<lyxtabular version="3" rows="2" columns="8">
+<features>
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+>
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+<
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
++
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+[
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+]
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+.
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+,
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+000
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+001
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+010
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+011
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+100
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+101
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+110
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+111
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+1 bit est réservé à la reconnaissance des caractère 
+\begin_inset Formula $\#$
+\end_inset
+
+ et 
+\begin_inset Formula $\$$
+\end_inset
+
+.
+\begin_inset Newline newline
+\end_inset
+
+Ce bit vaut 1 si l'un des deux caractères est présent.
+ L'argument vaut alors dans ce cas 0 si 
+\begin_inset Formula $\#$
+\end_inset
+
+ est présent, et 1 si 
+\begin_inset Formula $\$$
+\end_inset
+
+ est présent.
+\begin_inset Newline newline
+\end_inset
+
+Si le bit de contrôle vaut 0, le paramètre vaut l'argument de l'instruction.
+\end_layout
+
+\begin_layout Itemize
+16 bits de paramètres sont réservés à l'argument de l'instruction (
+\begin_inset Formula $16$
+\end_inset
+
+ dans 
+\begin_inset Formula $16>$
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+Afin d'éxécuter l'opération 
+\begin_inset Formula $[$
+\end_inset
+
+ correctement, on la précèdera dans la compilation par un instruction 
+\begin_inset Formula $0+$
+\end_inset
+
+, qui ne modifie pas les données mais calcule le flag Zero qui sert de condition
+ de jump.
+\end_layout
+
+\begin_layout Standard
+De même, pour effectuer correctement 
+\begin_inset Formula $\#+$
+\end_inset
+
+, on le compile par 
+\begin_inset Formula $\#+\$+$
+\end_inset
+
+, la première partie 
+\begin_inset Formula $\#+$
+\end_inset
+
+ servant au calcul de la plus grande puissance inférieure au compteur en
+ cours, sans modifier les données.
+\end_layout
+
+\end_body
+\end_document
