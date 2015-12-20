@@ -19,7 +19,7 @@ rule token = parse
                             int_of_string num
                         with _ -> raise (Lexing_error "int overflow")
                         in
-                        INT_CONST(i)
+                        ARG(i)
                     }
     | '.'           { PRINT }
     | ','           { READ }

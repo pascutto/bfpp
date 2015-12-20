@@ -1,11 +1,13 @@
-type bfinstruction = 
+type rinstruction = 
     | BFleft
     | BFright
     | BFincr
     | BFdecr
-    | BFprint
+
+and instruction = 
+    | Repeated of int * rinstruction
+    | Loop of int * program
     | BFread
-    | BFlbracket
-    | BFrbracket
-type instruction = int * bfinstruction
-type program = instruction list
+    | BFprint
+
+and program = instruction list

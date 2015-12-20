@@ -3,7 +3,7 @@
 %}
 
 %token LEFT RIGHT INCR DECR READ PRINT LBRACKET RBRACKET EOF
-%token <int> INT_CONST
+%token <int> ARG
 
 %start <Ast.program> prog
 
@@ -11,19 +11,22 @@
 
 prog: l = instr*; EOF            { l }
 
-instr: noption = INT_CONST?; i = bfinstr
+instr: 
+    | noption = ARG?; i = repeatable_instr
                                     { 
                                         match noption with
-                                            | None -> (1, i)
-                                            | Some n -> (n, i)
+                                            | None -> Repeated (1, i)
+                                            | Some n -> Repeated (n, i)
                                     }
+    | LBRACKET; l = instr*; RBRACKET  
+                                    { Loop( List.length l, l) }
+    | READ                          { BFread }
+    | PRINT                         { BFprint }
+;
 
-bfinstr:
+repeatable_instr:
     | LEFT                          { BFleft }
     | RIGHT                         { BFright }
     | INCR                          { BFincr }
     | DECR                          { BFdecr }
-    | READ                          { BFread }
-    | PRINT                         { BFprint }
-    | LBRACKET                      { BFlbracket }
-    | RBRACKET                      { BFrbracket }
+;

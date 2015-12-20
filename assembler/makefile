@@ -1,4 +1,4 @@
-CMO=lexer.cmo parser.cmo main.cmo
+CMO=lexer.cmo parser.cmo printer.cmo main.cmo
 GENERATED = lexer.ml parser.ml parser.mli
 BIN=assembler
 FLAGS=
@@ -28,6 +28,8 @@ clean:
 	rm -f *.cm[io] *.o *~ $(BIN) $(GENERATED) parser.automaton parser.conflicts .depend
 
 parser.ml: ast.mli
+
+printer.ml: ast.mli
 
 .depend depend: $(GENERATED)
 	rm -f .depend

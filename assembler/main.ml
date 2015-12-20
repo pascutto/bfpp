@@ -24,18 +24,23 @@ let () =
         exit 1;
     end;
 
+    output_file := (Filename.chop_suffix !input_file ".bfpp") ^
+    ".bin";
+
     let f = open_in !input_file in
     let buf = Lexing.from_channel f in
     
-    try
-        let p = Parser.prog Lexer.token buf in
-        close_in f;
-
-        print_int(List.length p);
-        print_newline();
+    let p = try
+        Parser.prog Lexer.token buf 
     with 
         _ -> begin
             localisation (Lexing.lexeme_start_p buf);
             eprintf "Erreur@.";
             exit 1
         end
+    in
+    close_in f; 
+    
+    let output_chan = open_out (!output_file) in
+    Printer.print p output_chan;
+    close_out output_chan
