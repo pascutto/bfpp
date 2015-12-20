@@ -4,6 +4,6 @@
 |:-:|:-:|:-:|:-:|
 | Modify, combine and optimize NetList simulators | Mihai | _MED_ | |
 | Circuit in MiniJazz | Mihai & Clement | **HARD** | |
-| BF++ Lexer & Parser | Clement | EASY | |
+| BF++ Lexer & Parser | Clement | EASY | Started, does not support # and $ |
 | BF++ -> Machine Code | Clement | EASY | |
 | Watch Code in BF | Caroline | _MED_ | |
