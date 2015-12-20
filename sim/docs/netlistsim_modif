@@ -1,0 +1,9 @@
+nappes: 
+~ int a la place de Array
+	desavantages: 
+		-> < 64 fils dans la meme nappe
+	avantages: 
+		-> operations beaucoup plus rapides
+
+memoires / registres: 
+~ listes a la place de Hashtbl pour les associations avec les equations (car ca ne change pas pendant l'execution)
