@@ -2,7 +2,7 @@
 
 | Task | Person in charge | Difficulty (In Theory) | Status |
 |:-:|:-:|:-:|:-:|
-| Modify, combine and optimize NetList simulators | Mihai | _MED_ | |
+| Modify, combine and optimize NetList simulators | Mihai | _MED_ | Somehow finished |
 | Circuit in MiniJazz | Mihai & Clement | **HARD** | |
 | BF++ Lexer & Parser | Clement | EASY | Started, does not support # and $ |
 | BF++ -> Machine Code | Clement | EASY | |
