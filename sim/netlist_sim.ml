@@ -80,13 +80,13 @@ let eval_concat (v1, l1) (v2, l2) =
 
 let eval_slice pos1 pos2 (v, l) =
     if pos1 >= 0 && pos2 < l then
-        (v lsr pos1) land ((1 lsl (pos2 - pos1 + 1)) - 1), pos2 - pos1 + 1
+        (v lsr (l - 1 - pos2)) land ((1 lsl (pos2 - pos1 + 1)) - 1), pos2 - pos1 + 1
     else
         raise Illegal_cable_operation
 
 let eval_select pos (v, l) =
     if pos < l then
-        (v land (1 lsl pos)) lsr pos, 1
+        (v land (1 lsl (l - 1 - pos))) lsr (l - 1 - pos), 1
     else
         raise Illegal_cable_operation
 
