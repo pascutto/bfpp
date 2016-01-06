@@ -1,4 +1,4 @@
-const wordSize = 16
+const n = 16 (* Word size *)
 const opSize = 20
 
 fulladder(a, b, c) = (s, r) where
@@ -9,7 +9,7 @@ end where
 adder<n>(a:[n], b:[n], c_in) = (o:[n], c_out) where
     if n = 0 then
         o = [];
-        c_out = 0;
+        c_out = c_in;
     else
         (s_n1, c_n1) = adder<n-1>(a[1..], b[1..], c_in);
         (s_n, c_out) = fulladder(a[0], b[0], c_n1);
@@ -17,11 +17,75 @@ adder<n>(a:[n], b:[n], c_in) = (o:[n], c_out) where
     end if
 end where
 
-pgp2pp<n>(a:[n], inp) = (o:[n]) where
-    if n = 0 then
-        o = [];
-    else
-        newinp = a[0] + inp;
-        o = (a[0] & not inp).pgp2pp<n-1>(a[1..], newinp);
-    end if
+cable_not<n>(a:[n]) = (o:[n]) where
+	if n = 0 then
+		o = [];
+	else
+		o = not(a[0]) . cable_not<n-1>(a[1..]);
+	end if
+end where
+
+zeroflag<n>(a:[n]) = (o) where
+	if n = 0 then
+		o = true;
+	else
+		o = not(a[0]) & zeroflag<n-1>(a[1..])
+	end if
+end where
+
+cable_mux<n>(c, a:[n], b:[n]) = (o:[n]) where
+	if n = 0 then
+		o = [];
+	else
+		o = mux(c, a[0], b[0]) . cable_mux<n-1>(c, a[1..], b[1..]);
+	end if
+end where
+
+au(a:[n], b:[n], control) = (o:[n], zflag, fflag) where
+	newb = cable_mux<n>(control, cable_not<n>(b), b);
+	(o, f) = adder<n>(a, newb, control);
+	fflag = mux(control, not f, f);
+	zflag = zeroflag<n>(o);
+end where
+
+router(instr:[opSize], zflag) = 
+(print, read, we1, we2, we3, jmp, dlr, aucontrol, b:[n]) where
+	rou = rom<6, 8>(instr[0..4].zflag);
+	o = rou;
+	b = instr[4..];
+	print = o[0];
+	read = o[1];
+	we1 = o[2];
+	we2 = o[3];
+	we3 = o[4];
+	jmp = o[5];
+	dlr = o[6];
+	aucontrol = o[7];
+end where
+
+cable_zero<n>() = (o:[n]) where
+	if n = 0 then
+		o = [];
+	else
+		o = false . cable_zero<n-1>();
+	end if 
+end where
+
+main(input:[n]) = (o:[n]) where
+	ptinstr = ram<1, n>(0, 1, 0, nptinstr); 
+	(defnptinstr, useless) = adder<n>(ptinstr, cable_zero<n>(), 1);
+	i = rom<n, opSize>(ptinstr);
+	(print, read, we1, we2, we3, jmp, dlr, aucontrol, b) = router(i, zflag);	
+	mempt = ram<1, n>(0, we2, 0, nmempt);
+	val = ram<n, n>(mempt, we1, mempt, nval);
+	a_au1 = cable_mux<n>(we2, mempt, val);
+	a_au = cable_mux<n>(jmp, ptinstr, a_au1);
+	dollar = ram<1, n>(0, we3, 0, val);
+	b_au = cable_mux<n>(dlr, dollar, b);
+	(c, nzflag, fflag) = au(a_au, b_au, aucontrol);
+	zflag = reg nzflag;
+	nptinstr = cable_mux<n>(jmp, c, defnptinstr);
+	nmempt = c;
+	nval = cable_mux<n>(read, input, c);
+	o = cable_mux<n>(print, val, cable_zero<n>());
 end where
