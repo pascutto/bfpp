@@ -6,7 +6,7 @@ type rinstruction =
 
 and instruction = 
     | Repeated of int * rinstruction
-    | Loop of int * program
+    | Loop of program
     | BFread
     | BFprint
 

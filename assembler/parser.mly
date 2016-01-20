@@ -19,7 +19,7 @@ instr:
                                             | Some n -> Repeated (n, i)
                                     }
     | LBRACKET; l = instr*; RBRACKET  
-                                    { Loop( List.length l, l) }
+                                    { Loop(l) }
     | READ                          { BFread }
     | PRINT                         { BFprint }
 ;

@@ -2,6 +2,8 @@ open Ast
 open Buffer
 open Printf
 
+let nbinstr = ref 0
+
 let char_of_bit = function
     | 0 -> '0'
     | 1 -> '1'
@@ -24,23 +26,35 @@ let rec bits_of_instr = function
         for k = 0 to 15 do
             Buffer.add_char b (char_of_bit((n lsr (15-k)) land 1))
         done;
+        incr nbinstr;
         Buffer.contents b
     end
-    | Loop(n, p) -> begin
+    | Loop(p) -> begin
         let b = Buffer.create 60 in
+        let init = !nbinstr in
         Buffer.add_string b "01000000000000000000";
-        Buffer.add_string b "10000000000000000000";
+        incr nbinstr;
+        incr nbinstr;
+        
+        let tmp = Buffer.create 0 in
         List.iter 
-            (fun i -> Buffer.add_string b ((bits_of_instr i)^"\n"))
+            (fun i -> Buffer.add_string tmp (bits_of_instr i))
             p;
+        
+        Buffer.add_string b "1000";
+        for k = 0 to 15 do
+            Buffer.add_char b (char_of_bit(((!nbinstr+1) lsr (15-k)) land 1))
+        done;
+        Buffer.add_buffer b tmp;
         Buffer.add_string b "1010";
         for k = 0 to 15 do
-            Buffer.add_char b (char_of_bit(((n+1) lsr (15-k)) land 1))
+            Buffer.add_char b (char_of_bit((init lsr (15-k)) land 1))
         done;
+        incr nbinstr;
         Buffer.contents b
     end
-    | BFread -> "11100000000000000000"
-    | BFprint -> "11000000000000000000"
+    | BFread -> incr nbinstr; "11100000000000000000"
+    | BFprint -> incr nbinstr; "11000000000000000000"
 
 
 let print p output_chan =
