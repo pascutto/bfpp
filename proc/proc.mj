@@ -63,10 +63,18 @@ router(instr:[opSize], zflag) =
 end where
 
 cable_zero<n>() = (o:[n]) where
+    if n = 0 then
+        o = [];
+    else
+        o = false . cable_zero<n-1>();
+    end if
+end where
+
+cable_one<n>() = (o:[n]) where
 	if n = 0 then
 		o = [];
 	else
-		o = false . cable_zero<n-1>();
+		o = true . cable_one<n-1>();
 	end if 
 end where
 
@@ -86,5 +94,5 @@ main(input:[n]) = (o:[n]) where
 	nptinstr = cable_mux<n>(jmp, b, defnptinstr); (* pas c *)
 	nmempt = c;
 	nval = cable_mux<n>(read, input, c);
-	o = cable_mux<n>(print, val, cable_zero<n>());
+	o = cable_mux<n>(print, val, cable_one<n>());
 end where

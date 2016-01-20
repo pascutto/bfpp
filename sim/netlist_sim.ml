@@ -201,13 +201,12 @@ let print_state i =
     )
 
 let print s l = 
-    Printf.fprintf !ofile "%s = " s;
     let v, l = eval (Avar s) in
-        for i = l - 1 downto 0 do
-            Printf.fprintf !ofile "%d" ((v land (1 lsl i)) lsr i)
-        done;
-        Printf.fprintf !ofile "\n";
-        flush !ofile
+        if v <> (1 lsl 16) - 1 then (
+            Printf.fprintf !ofile "%d" v;
+            Printf.fprintf !ofile "\n";
+            flush !ofile
+        )
 
 let print_outputs () =
     List.iter (fun s -> print s (get_length s)) p.p_outputs
@@ -248,11 +247,8 @@ let init () = init_reg (); init_mem (!mempath)
 
 let main () =
     for i = 0 to !steps - 1 do 
-        print_state i;
         read_inputs ();
         List.iter (fun eq -> exec eq) p.p_eqs;
-        print_transition ();
-        flush stdout;
         print_outputs ();
         update_reg ();
         update_mem ()
