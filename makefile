@@ -12,12 +12,13 @@ sim: FORCE
 asm: FORCE
 	cd assembler && make
 
-run:
+proc: FORCE
+	./minijazz/mjc.byte proc/proc.mj
+
+run: FORCE
 	./sim/netlist_sim.byte -steps $(steps) -mem proc/rom.mem -net proc/proc.net
 
 FORCE:
-
-
 
 clean: 
 	cd sim && make clean
