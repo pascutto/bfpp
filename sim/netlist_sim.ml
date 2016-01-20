@@ -173,7 +173,8 @@ let update_mem () =
         memAssocList
 
 let read s l =
-    if !ifile = stdin then (
+    StrHash.add varHash s (0, l)
+    (*if !ifile = stdin then (
         Printf.fprintf stdout "%s ? " s;
         flush stdout
     );
@@ -181,7 +182,7 @@ let read s l =
     let v = int_of_bstring str in
         if String.length str <> l then
             raise Illegal_input_value;
-        StrHash.add varHash s (v, l)
+        StrHash.add varHash s (v, l) *)
 
 let read_inputs () =
     List.iter (fun s -> read s (get_length s)) p.p_inputs 
