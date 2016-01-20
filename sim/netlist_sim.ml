@@ -134,7 +134,7 @@ let init_mem mempath =
                 let addrSize = Scanf.fscanf mfile "%d " ident in
                 let wordSize = Scanf.fscanf mfile "%d\n" ident in
                 let v = Array.make (1 lsl addrSize) 0 in
-                let str = Scanf.fscanf mfile "%s\n" ident in
+                let str = Scanf.fscanf mfile "%s" ident in
                     for j = 0 to Array.length v - 1 do
                         if j * wordSize < String.length str then
                             v.(j) <- int_of_bstring (String.sub str (j * wordSize) wordSize)
