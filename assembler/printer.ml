@@ -28,8 +28,8 @@ let rec bits_of_instr = function
     end
     | Loop(n, p) -> begin
         let b = Buffer.create 60 in
-        Buffer.add_string b "01000000000000000000\n";
-        Buffer.add_string b "10000000000000000000\n";
+        Buffer.add_string b "01000000000000000000";
+        Buffer.add_string b "10000000000000000000";
         List.iter 
             (fun i -> Buffer.add_string b ((bits_of_instr i)^"\n"))
             p;
@@ -46,7 +46,7 @@ let rec bits_of_instr = function
 let print p output_chan =
     List.iter
         ( fun instr ->  
-            fprintf output_chan "%s\n" (bits_of_instr instr)
+            fprintf output_chan "%s" (bits_of_instr instr)
         )
         p;
 
