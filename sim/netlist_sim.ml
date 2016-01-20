@@ -136,7 +136,10 @@ let init_mem mempath =
                 let v = Array.make (1 lsl addrSize) 0 in
                 let str = Scanf.fscanf mfile "%s\n" ident in
                     for j = 0 to Array.length v - 1 do
-                        v.(j) <- int_of_bstring (String.sub str (j * wordSize) wordSize)
+                        if j * wordSize < String.length str then
+                            v.(j) <- int_of_bstring (String.sub str (j * wordSize) wordSize)
+                        else
+                            v.(j) <- 0
                     done;
                     StrHash.add memHash id v
             done
