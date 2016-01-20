@@ -51,16 +51,15 @@ end where
 router(instr:[opSize], zflag) = 
 (print, read, we1, we2, we3, jmp, dlr, aucontrol, b:[n]) where
 	rou = rom<6, 8>(instr[0..4].zflag);
-	o = rou;
 	b = instr[4..];
-	print = o[0];
-	read = o[1];
-	we1 = o[2];
-	we2 = o[3];
-	we3 = o[4];
-	jmp = o[5];
-	dlr = o[6];
-	aucontrol = o[7];
+	print = rou[0];
+	read = rou[1];
+	we1 = rou[2];
+	we2 = rou[3];
+	we3 = rou[4];
+	jmp = rou[5];
+	dlr = rou[6];
+	aucontrol = rou[7];
 end where
 
 cable_zero<n>() = (o:[n]) where
@@ -84,7 +83,7 @@ main(input:[n]) = (o:[n]) where
 	b_au = cable_mux<n>(dlr, dollar, b);
 	(c, nzflag, fflag) = au(a_au, b_au, aucontrol);
 	zflag = reg nzflag;
-	nptinstr = cable_mux<n>(jmp, c, defnptinstr);
+	nptinstr = cable_mux<n>(jmp, b, defnptinstr); (* pas c *)
 	nmempt = c;
 	nval = cable_mux<n>(read, input, c);
 	o = cable_mux<n>(print, val, cable_zero<n>());
