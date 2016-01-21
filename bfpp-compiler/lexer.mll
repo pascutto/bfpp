@@ -21,8 +21,8 @@ rule token = parse
                         in
                         ARG(i)
                     }
-    | ','           { PRINT }
-    | '.'           { READ }
+    | '.'           { PRINT }
+    | ','           { READ }
     | '['           { LBRACKET }
     | ']'           { RBRACKET }
     | '#'           { HASHTAG }

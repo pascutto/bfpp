@@ -25,5 +25,10 @@ rule token = parse
     | ','           { READ }
     | '['           { LBRACKET }
     | ']'           { RBRACKET }
-    | eof           { EOF }
+    | '#'           { HASHTAG }
+    | '$'           { DOLLAR }
+    | "//" [^'\n']* '\n'
+                    { new_line lexbuf; token lexbuf }
+    | ("//" [^'\n']*)? eof
+                    { EOF }
     | _             { token lexbuf }
