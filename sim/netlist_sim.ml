@@ -37,18 +37,10 @@ let int_of_char ch =
     | _ -> raise Illegal_character
 
 let int_of_barray v =
-    let a = ref 0 in
-        for i = 0 to Array.length v - 1 do
-            a := (!a lsl 1) + int_of_bool v.(i)
-        done;
-         !a
+    Array.fold_left (fun ans vi -> (ans lsl 1) + int_of_bool vi) 0 v
 
 let int_of_bstring s =
-    let x = ref 0 in
-        for i = 0 to String.length s - 1 do
-            x := (!x lsl 1) + int_of_char s.[i]
-        done;
-        !x
+    String.fold_left (fun ans si -> (ans lsl 1) + int_of_char si) 0 v
 
 let is_true v = (v <> 0)
 
@@ -180,11 +172,11 @@ let update_mem () =
 
 let read_clock s l =
     let curtime = Sys.time() in
-    if curtime -. !lasttime >= 1. then (
-        lasttime := curtime; 
-        output := not(!output)
-    ); 
-    StrHash.add varHash s ((int_of_bool(!output)), l)
+        if curtime -. !lasttime >= 1. then (
+            lasttime := curtime; 
+            output := not(!output)
+        ); 
+        StrHash.add varHash s ((int_of_bool(!output)), l)
 
 let read s l =
     if !ifile = stdin then (
