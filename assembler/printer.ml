@@ -16,6 +16,21 @@ let bits_of_rinstr = function
     | BFdecr ->     "011"
 
 let rec bits_of_instr = function
+    | Hashtag(i) -> begin
+            let b = Buffer.create 40 in
+            Buffer.add_string b (bits_of_instr (Dollar(i)));
+            Buffer.add_string b (bits_of_rinstr i);
+            Buffer.add_string b ("10000000000000000");
+            incr nbinstr;
+            Buffer.contents b;
+    end
+    | Dollar(i) -> begin
+        let b = Buffer.create 20 in
+        Buffer.add_string b (bits_of_rinstr i);
+        Buffer.add_string b ("11000000000000000");
+        incr nbinstr;
+        Buffer.contents b;
+    end
     | Repeated(n, i) -> begin
         let b = Buffer.create 20 in
         (* Instruction bits *)

@@ -14,7 +14,10 @@ exception Illegal_cable_operation
 
 let p = schedule (read_file !netpath)
 
+let lasttime = ref 0.
+
 let nbop = List.length p.p_eqs
+let output = ref false
 
 let varHash = (StrHash.create nbop : ((int * int) StrHash.t))
 let memHash = (StrHash.create nbop : (int array StrHash.t))
@@ -176,7 +179,12 @@ let update_mem () =
         memAssocList
 
 let read s l =
-    StrHash.add varHash s (0, l)
+    let curtime = Sys.time() in
+    if curtime -. !lasttime >= 1. then (
+        lasttime := curtime; 
+        output := not(!output)
+    ); 
+    StrHash.add varHash s ((int_of_bool(!output)), l)
     (*if !ifile = stdin then (
         Printf.fprintf stdout "%s ? " s;
         flush stdout
@@ -185,7 +193,7 @@ let read s l =
     let v = int_of_bstring str in
         if String.length str <> l then
             raise Illegal_input_value;
-        StrHash.add varHash s (v, l) *)
+        StrHash.add varHash s (v, l)*)
 
 let read_inputs () =
     List.iter (fun s -> read s (get_length s)) p.p_inputs 
