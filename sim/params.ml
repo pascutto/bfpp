@@ -1,4 +1,4 @@
-let steps = ref 100
+let steps = ref 0
 let netpath = ref "/net.net"
 let mempath = ref ""
 let ipath = ref ""
@@ -25,7 +25,7 @@ let ignore _ = ()
 
 let main () = (
     let speclist = [
-        ("-steps", Arg.Int set_steps, "Sets the number of steps. Defaults to 100.");
+        ("-steps", Arg.Int set_steps, "Sets the number of steps. Defaults to 0 (infinite).");
         ("-net", Arg.String set_netpath, "Sets the filepath to the netlist. Defaults to \"./input.net\".");
         ("-mem", Arg.String set_mempath, "Sets the filepath to the RAM/ROM initialisation file. Defaults to \"\".");
         ("-input", Arg.String set_ipath, "Sets the filepath to the input file. Defaults to \"\" (stdin).");

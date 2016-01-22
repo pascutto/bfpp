@@ -178,14 +178,16 @@ let update_mem () =
         (fun (id, (addrSize, wordSize, awr, apos, arg)) -> write_mem id addrSize wordSize (is_true (fst (eval awr))) (fst (eval apos)) (fst (eval arg))) 
         memAssocList
 
-let read s l =
+let read_clock s l =
     let curtime = Sys.time() in
     if curtime -. !lasttime >= 1. then (
         lasttime := curtime; 
         output := not(!output)
     ); 
     StrHash.add varHash s ((int_of_bool(!output)), l)
-    (*if !ifile = stdin then (
+
+let read s l =
+    if !ifile = stdin then (
         Printf.fprintf stdout "%s ? " s;
         flush stdout
     );
@@ -193,10 +195,10 @@ let read s l =
     let v = int_of_bstring str in
         if String.length str <> l then
             raise Illegal_input_value;
-        StrHash.add varHash s (v, l)*)
+        StrHash.add varHash s (v, l)
 
-let read_inputs () =
-    List.iter (fun s -> read s (get_length s)) p.p_inputs 
+let read_inputs f =
+    List.iter (fun s -> f s (get_length s)) p.p_inputs 
 
 let print_state i =
     if !ifile = stdin then (
@@ -208,7 +210,7 @@ let print_state i =
         flush !ofile
     )
 
-let print s l = 
+let print_clock s l = 
     let v, l = eval (Avar s) in
         if v <> (1 lsl 16) - 1 then (
             Printf.fprintf !ofile "%d" v;
@@ -216,8 +218,15 @@ let print s l =
             flush !ofile
         )
 
-let print_outputs () =
-    List.iter (fun s -> print s (get_length s)) p.p_outputs
+let print s l =
+    let v, l = eval (Avar s) in
+        Printf.fprintf !ofile "%s = " s;
+        Printf.fprintf !ofile "%d" v;
+        Printf.fprintf !ofile "\n";
+        flush !ofile
+
+let print_outputs f =
+    List.iter (fun s -> f s (get_length s)) p.p_outputs
 
 let print_transition () =
     if !ifile = stdin && !ofile = stdout then (
@@ -253,13 +262,34 @@ let rec exec eq =
 
 let init () = init_reg (); init_mem (!mempath)
 
-let main () =
-    for i = 0 to !steps - 1 do 
-        read_inputs ();
-        List.iter (fun eq -> exec eq) p.p_eqs;
-        print_outputs ();
-        update_reg ();
-        update_mem ()
-    done
+let body_clock i =
+    read_inputs read_clock;
+    List.iter (fun eq -> exec eq) p.p_eqs;
+    print_outputs print_clock;
+    update_reg ();
+    update_mem ()
 
-let _ = print_sprogram (String.concat "" [!netpath; "_sch"]); init (); main ()
+let body i =
+    print_state i;
+    read_inputs read;
+    List.iter (fun eq -> exec eq) p.p_eqs;
+    print_transition ();
+    flush !ofile;
+    print_outputs print;
+    update_reg ();
+    update_mem ()
+
+let main b =
+    if !steps = 0 then (
+        let i = ref 0 in
+            while (true) do
+                b !i;
+                incr i
+            done
+    ) else (
+        for i = 0 to !steps - 1 do 
+            b i
+        done
+    )
+
+let _ = init (); main body_clock
