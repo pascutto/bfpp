@@ -40,7 +40,9 @@ let int_of_barray v =
     Array.fold_left (fun ans vi -> (ans lsl 1) + int_of_bool vi) 0 v
 
 let int_of_bstring s =
-    String.fold_left (fun ans si -> (ans lsl 1) + int_of_char si) 0 v
+    let v = ref 0 in
+        String.iter (fun si -> v := (!v lsl 1) + int_of_char si) s;
+        !v
 
 let is_true v = (v <> 0)
 
