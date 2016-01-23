@@ -155,7 +155,7 @@ let read_mem ty id addrSize wordSize pos =
         if ty = 0 then
             raise ROM_not_defined;
         let v = Array.make (1 lsl addrSize) 0 in
-            StrHash.add memHash id v;
+            StrHash.replace memHash id v;
             get_word v pos
     )
 
@@ -178,7 +178,7 @@ let read_clock s l =
             lasttime := curtime; 
             output := not(!output)
         ); 
-        StrHash.add varHash s ((int_of_bool(!output)), l)
+        StrHash.replace varHash s ((int_of_bool(!output)), l)
 
 let read s l =
     if !ifile = stdin then (
@@ -189,7 +189,7 @@ let read s l =
     let v = int_of_bstring str in
         if String.length str <> l then
             raise Illegal_input_value;
-        StrHash.add varHash s (v, l)
+        StrHash.replace varHash s (v, l)
 
 let read_inputs f =
     List.iter (fun s -> f s (get_length s)) p.p_inputs 
