@@ -20,9 +20,9 @@ ldays = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
 def str_of_date(sday, month, year):
     if leap_year(year):
-        day = ldays[month] - sday
+        day = ldays[month] - sday + 1
     else:
-        day = days[month] - sday
+        day = days[month] - sday + 1
     return (two_digit_str(day) + " / " + two_digit_str(month + 1) + " / " + str(year))
 
 def update_text():

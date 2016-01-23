@@ -26,31 +26,41 @@
             >-                      // On incremente les jours
         ]
         >-                          // On incremente les mois
-        6>#-12+6<#-$+6>$-        // mois
+        6>12+6<#-$+6>$-        // mois
         #+4<#-$+4>$+                // 2 * mois + bissextil
         #-495>$>
         [-$<502<+502>$>]     // On recupere la longueur du mois courant
         $<501<
     ]
-    >+2>->->->#-<                      // On incremente l'annee
-    [400+<100+<4+<+3>#-]            // Divisible par 400
-    $+>#-2<
-    [100+<4+<#-2>#-]                // Divisible par 100
-    $+2>#-3<
-    [4+<+>#-]                       // Divisible par 4
-    $+
-    2<
+    >+>#->->->->#-<              // On incremente l'annee
+    2>#-2<
+    #-$+2>$+>+<
+    [>-]>                   // Pas divisible par 400
+    [2<+<400+3>->]            // Divisible par 400
+    5<
+    3>#-3<
+    #-$+3>$+>+<
+    [>-]>                   // Pas divisible par 100
+    [2<+2<100+4>->]           // Divisible par 100
+    6<
+    4>#-4<
+    #-$+4>$+>+<
+    [>-]>                   // Pas divisible par 4
+    [2<+3<4+5>->]             // Divisible par 4
+    2<#-<-
+    >+<
+    [
+        #-3>$+2->+<
+        [>-]>
+        [8<+8>->]
+        2<#-2<-]>
+    [5<+5>->]
+    7<
 
-    500>31+>31+>28+>29+>31+>31+>30+>30+>31+>31+>
-    30+>30+>31+>31+>31+>31+>30+>30+>31+>31+>30+>
-    30+>31+>31+523<             // Reinit des longueurs des mois
+    500>#-31+>#-31+>#-28+>#-29+>#-31+>#-31+>#-30+>#-30+>#-31+>#-31+>
+    #-30+>#-30+>#-31+>#-31+>#-31+>#-31+>#-30+>#-30+>#-31+>#-31+>#-30+>
+    #-30+>#-31+>#-31+523<             // Reinit des longueurs des mois
     <12+                    // On remet le mois a 0
-
-    #-12+6<#-$+6>$-        // mois
-    #+4<#-$+4>$+                // 2 * mois + bissextil
-    #-495>$>
-    [-$<502<+502>$>]     // On recupere la longueur du mois courant
-    $<501<                           
-
-    41>						// Et on ne s'arrête jamais
+    <31+                // Janvier
+    42>					// Et on ne s'arrête jamais
 ]       
