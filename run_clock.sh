@@ -5,6 +5,7 @@ min=$((60 - `date +%M`))
 hour=$((24 - `date +%H`))
 
 
+
 sed "1i\\$sec+>$min+>$hour+" clock/clock_realtime_zero.bfpp > clock/clock.bfpp
 
 ./create_rom.sh clock/clock.bfpp

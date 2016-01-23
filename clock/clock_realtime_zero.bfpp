@@ -5,11 +5,10 @@
 	[<						// Tant que les minutes != 60
 		[						// Tant que les secondes != 60
 			.>.>.<<					// On imprime
-			43>+[,-#->>$-#-<<$+
-				#->>$+<<+
-				>#-$+>$-
-				[<<->>#-]<<
-			]>-#->$-#-<$+44<			// On attend
+			44>+[,
+			#->>$+<#-$+>$-[<<+>>#-]<<
+			]
+			>-#->$-#-<$+45<			// On attend
 			-						// On incrémente les secondes
 		]							
 		60+						// remet les secondes à 0

@@ -22,7 +22,6 @@ let rec bits_of_instr = function
             Buffer.add_string b ("10000000000000000");
             incr nbinstr;
             Buffer.add_string b (bits_of_instr (Dollar(i)));
-            incr nbinstr;
             Buffer.contents b;
     end
     | Dollar(i) -> begin
