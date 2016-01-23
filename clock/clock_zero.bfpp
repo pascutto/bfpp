@@ -1,4 +1,3 @@
-60+>1+>10+40>+			// init la mémoire
 [
 40<						// on se place sur les heures
 [<						// Tant que les heures != 24
