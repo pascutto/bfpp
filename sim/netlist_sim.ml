@@ -286,4 +286,4 @@ let main b =
         done
     )
 
-let _ = init (); main body_clock
+let _ = init (); if !manual_input then main body else main body_clock

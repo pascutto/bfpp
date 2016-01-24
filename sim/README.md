@@ -18,7 +18,7 @@ If you want to delete the files created by `make`, you can use:
 ---
 ## *Options* ##
 
-`./netlist_sim.byte [-steps {n}] [-mem {*}] [-net {*}] [-input {*}] [-output {*}]`
+`./netlist_sim.byte [-steps {n}] [-mem {*}] [-net {*}] [-input {*}] [-output {*}] [-manual {true/false}]`
 
 - `-steps {n}`: Sets the number of steps to n. Defaults to 100.
 
@@ -29,6 +29,8 @@ If you want to delete the files created by `make`, you can use:
 - `-input {*}`: Sets the filepath to the input file. Defaults to "" (stdin).
 
 - `-output {*}`: Sets the filepath to the output file. Defaults to "" (stdout).
+
+- `-manual {true/false}`: Sets the input method. Defaults to false (no manual input).
 
 - `-help`: Shows information on available options.
 

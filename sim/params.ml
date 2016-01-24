@@ -5,6 +5,7 @@ let ipath = ref ""
 let opath = ref ""
 let ifile = ref stdin
 let ofile = ref stdout
+let manual_input = ref false
 
 let set_steps x = 
     steps := x
@@ -21,6 +22,9 @@ let set_ipath s =
 let set_opath s =
     opath := s
 
+let set_manual s =
+    manual_input := s
+
 let ignore _ = ()
 
 let main () = (
@@ -30,6 +34,7 @@ let main () = (
         ("-mem", Arg.String set_mempath, "Sets the filepath to the RAM/ROM initialisation file. Defaults to \"\".");
         ("-input", Arg.String set_ipath, "Sets the filepath to the input file. Defaults to \"\" (stdin).");
         ("-output", Arg.String set_opath, "Sets the filepath to the output file. Defaults to \"\" (stdout).");
+        ("-manual", Arg.Bool set_manual, "Sets the input method. Defaults to false (no manual input).")
     ] in
         Arg.parse speclist ignore "A basic netlist simulator. Options available:";
         if (!ipath <> "") then
