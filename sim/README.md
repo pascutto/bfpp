@@ -20,7 +20,7 @@ If you want to delete the files created by `make`, you can use:
 
 `./netlist_sim.byte [-steps {n}] [-mem {*}] [-net {*}] [-input {*}] [-output {*}] [-manual {true/false}]`
 
-- `-steps {n}`: Sets the number of steps to n. Defaults to 100.
+- `-steps {n}`: Sets the number of steps to n. Defaults to 0 (infinite).
 
 - `-mem {*}`: Sets the filepath to the RAM/ROM initialisation file. Defaults to "" (No RAM/ROM initialisation).
 
