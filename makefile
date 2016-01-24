@@ -1,25 +1,28 @@
 steps?=1
 
 all:
-	./minijazz/mjc.byte proc/proc.mj
+	./mjc/mjc.byte cpu/proc.mj
 	cd sim && make
-	cd assembler && make
+	cd asm && make
 
 sim: FORCE
 	cd sim && make
 
 asm: FORCE
-	cd assembler && make
+	cd asm && make
 
-proc: FORCE
-	./minijazz/mjc.byte proc/proc.mj
+cpu: FORCE
+	./mjc/mjc.byte cpu/proc.mj
 
 run: FORCE
-	./sim/netlist_sim.byte -steps $(steps) -mem proc/rom.mem -net proc/proc.net
+	./sim/netlist_sim.byte -steps $(steps) -mem cpu/rom.mem -net cpu/proc.net
 
 FORCE:
 
 clean: 
 	cd sim && make clean
-	cd assembler && make clean
-	rm proc/proc.net*
+	cd asm && make clean
+	rm cpu/proc.net
+	rm cpu/rom.mem
+	rm clk/*.bin
+	rm clk/clock_realtime.bfpp

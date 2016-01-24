@@ -1,12 +1,11 @@
 #!/bin/bash
 
-sec=$((60 - `date +%S`))
-min=$((60 - `date +%M`))
-hour=$((24 - `date +%H`))
-
-
-
-sed "1i\\$sec+>$min+>$hour+" clock/clock_realtime_zero.bfpp > clock/clock.bfpp
-
-./create_rom.sh clock/clock.bfpp
-./sim/netlist_sim.byte -mem proc/rom.mem -steps 0 -net proc/proc.net | python3 sexy_printer.py
+if [ $1 = "fast" ]
+then 
+	./create_rom.sh clk/clock_zero.bfpp
+else
+	python3 clk/format_date.py > tmp && cat clk/clock_realtime_init.bfpp >> tmp && mv tmp clk/clock_realtime.bfpp
+	./create_rom.sh clk/clock_realtime.bfpp
+fi 
+	
+./sim/netlist_sim.byte -mem cpu/rom.mem -steps 0 -net cpu/proc.net | python3 clk/sexy_printer.py
