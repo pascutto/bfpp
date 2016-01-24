@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ $1 = "fast" ]
+if [[ $1 = "fast" ]]
 then 
 	./create_rom.sh clk/clock_zero.bfpp
 else
