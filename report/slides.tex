@@ -1,0 +1,91 @@
+\documentclass{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+
+\usetheme{Warsaw}
+
+\title{Projet microprocesseur}
+\author{Mihai Dusmanu, Clément Pascutto}
+\institute{Système digital\\École normale supérieure}
+\date{Mardi 26 Janvier 2016}
+
+\begin{document}
+
+	\begin{frame}
+		\maketitle
+	\end{frame}
+
+	\begin{frame}
+		\frametitle{Sommaire}
+		\tableofcontents
+	\end{frame}
+
+	\section{Microprocesseur}
+	\subsection{Assembleur}
+	\begin{frame}
+		\frametitle{Assembleur}
+		\framesubtitle{Jeu d'instructions de base :
+			\emph{brainfuck}(1993)}
+		\begin{enumerate}
+			\item $+$ : Incrémente le compteur courant 
+			\pause
+			\item $-$ : Décrémente le compteur courant 
+			\pause
+			\item $>$ : Incrémente le pointeur vers le compteur courant
+			\pause
+			\item $<$ : Décrémente le pointeur vers le compteur courant
+			\pause
+			\item $[$ : Saute à l'instruction suivante si la valeur du compteur
+				courant est non nulle, sinon saute au $]$ correspondant
+			\pause
+			\item $]$ : Saute au $[$ correspondant
+			\pause
+			\item $.$ : Affiche la valeur du compteur courant
+			\pause
+			\item $,$ : Lit une valeur et l'écrit dans le compteur courant
+		\end{enumerate}
+	\end{frame}
+
+	\begin{frame}
+		\frametitle{Assembleur}
+		\framesubtitle{Optimisations}
+		On apporte deux optimisations majeures :
+		\pause
+		\begin{itemize}
+			\item Contraction : $+++++++$ devient $7+$.
+				\\
+				On peut appliquer la même transformation aux opérations $+$, 
+				$-$, $>$ et $<$.
+			\pause
+		\item Ajout d'un registre : $[->+<]$ devient \#$->$\$$+<$. \\
+			\# vaut la valeur du compteur courant. \\
+			\$ vaut la valeur du dernier \# calculé.
+		\end{itemize}
+	\end{frame}
+
+	\subsection{Architecture}
+	\begin{frame}
+		\frametitle{Architecture}
+
+	\end{frame}
+
+	\subsection{Compilation de l'assembleur}
+	\begin{frame}
+		\frametitle{Compilation de l'assembleur}
+		Les instructions de la ROM sont des mots de $20$ bits :
+		\pause
+		\begin{itemize}
+			\item $3$ bits d'instructions
+			\pause
+			\item $1$ bit de registre
+			\pause
+			\item $16$ bits de paramètres
+		\end{itemize}
+		\pause
+		~\\
+		On compile \#$op$ par \#$+$\$$op$ pour mettre à jour la valeur du
+		registre.\pause \\
+		On compile $[$ par $0+[$ pour calculer le flag Zero.
+	\end{frame}
+\end{document}
