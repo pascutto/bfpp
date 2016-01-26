@@ -1,0 +1,67 @@
+1+>1+>1+>4+>1+>2016+>1+>4+>84+>384+4<
+500>31+>31+>28+>29+>31+>31+>30+>30+>31+>31+>
+30+>30+>31+>31+>31+>31+>30+>30+>31+>31+>30+>
+30+>31+>31+523<             // nb des jours de chaque mois
+40>+
+[
+    41<                     // on se place sur les mois
+    [<                      // Tant que mois != 12
+        [<						// Tant que jour != nbjours
+            [<						// Tant que les heures != 24
+	            [<						// Tant que les minutes != 60
+		            [						// Tant que les secondes != 60
+			            .>.>.>.>.>.5<					// On imprime
+			            46>+[,
+			                #-2>$+<#-$+>$-[2<+2>#-]2<
+			            ]
+			            >-#->$-#-<$+47<			// On attend
+			            -						// On incrémente les secondes
+		            ]							
+		            1+						// remet les secondes à 0
+		            >-						// on incrémente les minutes
+	            ]
+	            1+						// On remet les minutes à 0
+	            >-						// On incrémente les heures
+            ]
+            1+						// On remet les heures à 0
+            >-                      // On incremente les jours
+        ]
+        >-                          // On incremente les mois
+        6>12+6<#-$+6>$-        // mois
+        #+4<#-$+4>$+                // 2 * mois + bissextil
+        #-495>$>
+        [-$<502<+502>$>]     // On recupere la longueur du mois courant
+        $<501<
+    ]
+    >+>#->->->->#-<              // On incremente l'annee
+    2>#-2<
+    #-$+2>$+>+<
+    [>-]>                   // Pas divisible par 400
+    [2<+<400+3>->]            // Divisible par 400
+    5<
+    3>#-3<
+    #-$+3>$+>+<
+    [>-]>                   // Pas divisible par 100
+    [2<+2<100+4>->]           // Divisible par 100
+    6<
+    4>#-4<
+    #-$+4>$+>+<
+    [>-]>                   // Pas divisible par 4
+    [2<+3<4+5>->]             // Divisible par 4
+    2<#-<-
+    >+<
+    [
+        #-3>$+2->+<
+        [>-]>
+        [8<+8>->]
+        2<#-2<-]>
+    [5<+5>->]
+    7<
+
+    500>#-31+>#-31+>#-28+>#-29+>#-31+>#-31+>#-30+>#-30+>#-31+>#-31+>
+    #-30+>#-30+>#-31+>#-31+>#-31+>#-31+>#-30+>#-30+>#-31+>#-31+>#-30+>
+    #-30+>#-31+>#-31+523<             // Reinit des longueurs des mois
+    <12+                    // On remet le mois a 0
+    <31+                // Janvier
+    42>					// Et on ne s'arrête jamais
+]       

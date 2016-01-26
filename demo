@@ -1,0 +1,9 @@
+./run_clock.sh
+./run_clock.sh fast
+./run_demo.sh clk/demo/clock_month_change.bfpp
+./run_demo.sh clk/demo/clock2015-2016.bfpp
+./run_demo.sh clk/demo/clock2016-2017.bfpp
+./run_demo.sh clk/demo/clock2017-2018.bfpp
+./run_demo.sh clk/demo/clock2099-2100.bfpp
+./run_demo.sh clk/demo/clock2399-2400.bfpp
+
