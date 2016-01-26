@@ -67,7 +67,17 @@
 	\subsection{Architecture}
 	\begin{frame}
 		\frametitle{Architecture}
-
+        \begin{itemize}
+            \item Une mémoire ROM contenant les instructions du programme
+            \item Une table de routage composée d'une ROM qui convertit les instructions en bits de contrôle pour les autres composants
+            \item Une unité arithmétique (UA) capable d'effectuer les opérations PLUS et MOINS
+            \item Une mémoire RAM contenant $2^{16}$ compteurs
+            \item Un pointeur indiquant l'adresse du compteur courant dans la RAM
+            \item Un pointeur indiquant l'adresse de l'instruction courante dans la ROM du programme relié à un incrémenteur conditionnel
+            \item Une RAM de taille 1 contenant la valeur du dernier \# calculé
+            \item Un entrée sur 16 bits, prise en compte seulement lorsque l'instruction courante est la lecture
+            \item Une sortie sur 16 bits, qui vaut $2^{16}-1$ si l'instruction courante n'est pas une instruction PRINT, et qui vaut la valeur du compteur courant sinon
+        \end{itemize}
 	\end{frame}
 
 	\subsection{Compilation de l'assembleur}
