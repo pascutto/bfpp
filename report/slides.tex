@@ -68,15 +68,21 @@
 	\begin{frame}
 		\frametitle{Architecture}
         \begin{itemize}
-            \item Une mémoire ROM contenant les instructions du programme
-            \item Une table de routage composée d'une ROM qui convertit les instructions en bits de contrôle pour les autres composants
-            \item Une unité arithmétique (UA) capable d'effectuer les opérations PLUS et MOINS
-            \item Une mémoire RAM contenant $2^{16}$ compteurs
+            \item Une ROM de programme
+				\pause
+            \item Une ROM de routage
+				\pause
+			\item Une unité arithmétique
+				\pause
+            \item Un pointeur indiquant l'adresse de l'instruction
+				\pause
+            \item Une mémoire contenant la valeur du dernier \# calculé
+				\pause
+			\item Un entrée sur 16 bits
+            \item Une sortie sur 16 bits
+				\pause
+			\item La RAM principale contenant $2^{16}$ compteurs
             \item Un pointeur indiquant l'adresse du compteur courant dans la RAM
-            \item Un pointeur indiquant l'adresse de l'instruction courante dans la ROM du programme relié à un incrémenteur conditionnel
-            \item Une RAM de taille 1 contenant la valeur du dernier \# calculé
-            \item Un entrée sur 16 bits, prise en compte seulement lorsque l'instruction courante est la lecture
-            \item Une sortie sur 16 bits, qui vaut $2^{16}-1$ si l'instruction courante n'est pas une instruction PRINT, et qui vaut la valeur du compteur courant sinon
         \end{itemize}
 	\end{frame}
 
@@ -97,5 +103,84 @@
 		On compile \#$op$ par \#$+$\$$op$ pour mettre à jour la valeur du
 		registre.\pause \\
 		On compile $[$ par $0+[$ pour calculer le flag Zero.
+	\end{frame}
+
+	\section{Montre digitale}
+	\subsection{Présentation générale}
+	\begin{frame}
+		\frametitle{Présentation générale}
+		La mémoire contient les compteurs suivants :
+		\pause
+		\begin{enumerate}
+			\setcounter{enumi}{-1}
+			\item $60 -$ secondes
+				\pause
+			\item $60 -$ minutes
+			\item $24 -$ heures
+			\item nombre de jours dans le mois $-$ jours
+			\item $12 -$ mois
+			\item année
+			\item bissextile ?
+		\end{enumerate}
+	\end{frame}
+
+	\subsection{Sleep}
+	\begin{frame}
+		\frametitle{Sleep}
+		
+		\begin{itemize}
+			\item On lit l'entrée
+				\pause
+			\item On la compare à la valeur attendue
+				\pause
+			\item Si elles correspondent, on continue et on change la
+				valeur attendue
+				\pause
+			\item Sinon, on recommence
+		\end{itemize}
+		\pause
+		$[,$\\
+			\hspace{1cm} \#$->>$\$$+<$\#$-$\$$+>$\$$-[<<+>>$\#$-]<<$\\ 
+			// Test d'inégalité\\
+		$]$\\
+		$>-$\#$->$\$$-$\#$-<$\$$+<$ // Mise à jour de la valeur attendue
+	\end{frame}
+
+	\subsection{Années bissextiles}
+	\begin{frame}
+		\frametitle{Années bissextiles}
+		On ajoute dans la mémoire :
+		\pause
+		\begin{enumerate}
+			\setcounter{enumi}{6}
+			\item $4 -$ année $\mod 4$
+				\pause
+			\item $100 -$ année $\mod 100$ 
+				\pause
+			\item $400 -$ année $\mod 400$
+				\pause
+		\end{enumerate}
+		\vspace{5mm}
+		Le code pour changer l'année devient :
+			$+>>->->-$
+	\end{frame}
+	
+	\begin{frame}
+		\frametitle{Années bissextiles}
+		année bissextile $\Leftrightarrow (v(7)==0) + (v(8) ==0) +
+		(v(9)==0) \in \{1,3\}$\\
+		\pause
+		\vspace{1cm}
+		Pour traiter les mois :
+		\pause
+		\begin{itemize}
+			\item On place dans la mémoire à un offset $o$ les longueurs
+				des mois :\pause \\
+				$o + 2k$ : longueur du mois $k$ si l'année n'est pas bissextile\\
+				\pause $o + 2k + 1$
+				\pause
+			\item On se déplace de $o + 2\times mois + bissextile$
+				
+		\end{itemize}
 	\end{frame}
 \end{document}
